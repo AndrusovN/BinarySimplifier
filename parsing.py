@@ -17,8 +17,10 @@ def resolve_op(polynom1, polynom2, op):
 
 def parse(data: str) -> ZhegalkinsPolynom:
     data = data.replace(' ', '')
-    if len(data) == 0:
+    if len(data) == 0 or data == "0":
         return ZhegalkinsPolynom()
+    if data == "1":
+        return ZhegalkinsPolynom(values=set(BinValue()))
     if data[0] == '!':
         return parse(data[1:]) + BinValue()
 
@@ -48,7 +50,7 @@ def parse(data: str) -> ZhegalkinsPolynom:
     idx = VariableNamesHolder().get_variable_index(name)
     if idx == -1:
         idx = VariableNamesHolder().add_variable(name)
-    res1 = ZhegalkinsPolynom(set([BinValue([idx])]))
+    res1 = ZhegalkinsPolynom({BinValue([idx])})
     if index == len(data):
         return res1
     op = data[index]

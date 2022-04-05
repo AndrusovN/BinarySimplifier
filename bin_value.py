@@ -1,4 +1,5 @@
 from variable_names import VariableNamesHolder
+import gmpy2
 
 
 class BinValue:
@@ -23,6 +24,9 @@ class BinValue:
     def __getitem__(self, key) -> bool:
         return ((self.data >> key) & 1) == 1
 
+    def __len__(self):
+        return gmpy2.popcount(self.data)
+
     def __mul__(self, other):
         return BinValue(data=(self.data | other.data))
 
@@ -35,8 +39,10 @@ class BinValue:
         while current_value > 0:
             if current_value % 2 == 1:
                 if len(result) > 0:
-                    result += "*"
+                    result += " * "
                 result += VariableNamesHolder().get_variable_name(id)
             id += 1
             current_value = current_value // 2
+        if gmpy2.popcount(self.data) > 1:
+            result = f"({result})"
         return result
