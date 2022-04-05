@@ -57,7 +57,7 @@ def parse(data: str) -> ZhegalkinsPolynom:
     idx = VariableNamesHolder().get_variable_index(name)
     if idx == -1:
         idx = VariableNamesHolder().add_variable(name)
-    res1 = ZhegalkinsPolynom({BinValue([idx])})
+    res1 = ZhegalkinsPolynom({BinValue(included_values=[idx])})
     if index == len(data):
         return res1
     op = data[index]

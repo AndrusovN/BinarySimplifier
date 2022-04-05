@@ -1,5 +1,7 @@
 from bin_value import BinValue
 from copy import deepcopy
+
+from hashable_set import HashableSet
 from or_block import OrBlock
 
 
@@ -47,8 +49,6 @@ class ZhegalkinsPolynom:
     def __str__(self):
         # Generate the set of OrBlocks
         values_set = {OrBlock(binVal=item) for item in self.values}
-
-
         if len(values_set) == 0:
             return "0"
         result = ""
@@ -63,7 +63,7 @@ class ZhegalkinsPolynom:
                 for j in range(i + 1, len(tmp_values)):
                     # Try to unite
                     value = tmp_values[i] * tmp_values[j]
-                    if value.data == tmp_values[i].data or value.data == tmp_values[j].data:
+                    if value == tmp_values[i] or value == tmp_values[j]:
                         continue
                     # If success, unite and continue
                     if value in values_set:
@@ -78,11 +78,11 @@ class ZhegalkinsPolynom:
                     break
         # Then print everything
         for value in values_set:
-            if value.data == 1:
+            if value.monoms_set.data == 1:
                 continue
             if len(result) > 0:
                 result += " ^ "
             result += str(value)
-        if OrBlock(data=1) in values_set:
+        if OrBlock(data=HashableSet(data=1)) in values_set:
             result = f"!({result})"
         return result
