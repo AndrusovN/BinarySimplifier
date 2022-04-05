@@ -1,14 +1,17 @@
+# A class to collect statistical data and print it
 from singleton import singleton
 import math
 
 
 @singleton
 class StatisticsManager:
+    # A dictionary with key=variables count, value = cases of simplification (sample complexity, result complexity)
     compression_statistics = {}
 
     def __init__(self):
         pass
 
+    # When new statistical case is created
     def add_case(self, variables_count, source_complexity, result_complexity):
         if variables_count not in self.compression_statistics.keys():
             self.compression_statistics[variables_count] = []
