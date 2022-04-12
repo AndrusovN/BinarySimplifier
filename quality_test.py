@@ -45,6 +45,11 @@ def make_test_method(sample: str, variables_count: int):
         operations_count_sample = sample.count("!") + sample.count("+") + sample.count("*") + sample.count("^")
         operations_count_result = result_text.count("!") + result_text.count("+") \
               + result_text.count("*") + result_text.count("^")
+
+        if operations_count_result > operations_count_sample:
+            print("Bad test case:")
+            print(sample)
+            print(result_text)
         # save statistics
         StatisticsManager().add_case(variables_count, operations_count_sample + 1, operations_count_result + 1)
         # assert that complexity is lower

@@ -84,5 +84,10 @@ class ZhegalkinsPolynom:
                 result += " ^ "
             result += str(value)
         if OrBlock(data=HashableSet(data=1)) in values_set:
-            result = f"!({result})"
+            if result == "":
+                result = "1"
+            else:
+                result = f"!({result})"
+        elif len(values_set) == 1:
+            result = result[1:-1]
         return result

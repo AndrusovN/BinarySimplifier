@@ -45,7 +45,7 @@ class OrBlock:
     # make string from OrBlock
     def __str__(self):
         # Firstly find common dividers of all monoms, so the block will look as (a*b*c*d*(e + f + g + h))
-        common = HashableSet()
+        common = None
         for item in self.monoms_set:
             if common is None:
                 common = BinValue(data=HashableSet(item)).monom
