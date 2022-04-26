@@ -29,6 +29,14 @@ class BinValue:
     def __getitem__(self, key) -> bool:
         return self.monom[key]
 
+    # kwargs should contain HashableSet called bitmask with elements which are true
+    def __call__(self, *args, **kwargs):
+        bitmask = kwargs['bitmask']
+        for item in self.monom:
+            if item not in bitmask:
+                return False
+        return True
+
     # count of variables with non-zero power in this monom
     def __len__(self):
         return len(self.monom)

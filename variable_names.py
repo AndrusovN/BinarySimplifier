@@ -30,3 +30,6 @@ class VariableNamesHolder:
     def add_variable(self, name: str):
         self.variable_names.append(name)
         return len(self.variable_names) - 1
+
+    def get_count(self):
+        return len(self.variable_names)

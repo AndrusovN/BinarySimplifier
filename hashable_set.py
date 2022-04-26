@@ -20,8 +20,15 @@ class HashableSet:
     def __hash__(self):
         return hash(self.data)
 
+    def __xor__(self, other):
+        return HashableSet(self.data ^ other.data)
+
     def __and__(self, other):
         return HashableSet(self.data & other.data)
+
+    def is_subset(self, other):
+        result = self ^ other
+        return len(result) == len(self) - len(other)
 
     def __len__(self):
         return gmpy2.popcount(self.data)
@@ -47,3 +54,15 @@ class HashableSet:
                 yield step
             current_value //= 2
             step += 1
+
+    def to_string(self, size=-1):
+        result = ""
+        if size == -1:
+            current_value = self.data
+            while current_value > 0:
+                result += str(current_value & 1) + " "
+                current_value //= 2
+        else:
+            for i in range(size):
+                result += str((self.data & (1 << i)) >> i) + " "
+        return result

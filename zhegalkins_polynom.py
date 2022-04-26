@@ -45,6 +45,12 @@ class ZhegalkinsPolynom:
     def __or__(self, other):
         return self + other + (self * other)
 
+    def __call__(self, *args, **kwargs):
+        result = 0
+        for item in self.values:
+            result += int(item(*args, **kwargs))
+        return result % 2 == 1
+
     # Format polynom as string
     def __str__(self):
         # Generate the set of OrBlocks
