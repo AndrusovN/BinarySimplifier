@@ -55,6 +55,8 @@ class OrBlock:
         # if common is not zero, create the common monom as other bracket
         if common != HashableSet(data=0):
             res = f"{str(BinValue(data=common))}"
+            if len(common) > 1:
+                res = f"({res})"
         else:
             res = ""
         # generate the second bracket

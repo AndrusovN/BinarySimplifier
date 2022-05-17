@@ -55,5 +55,5 @@ class BinValue:
                 result += " * "
             result += VariableNamesHolder().get_variable_name(variable)
         if len(self.monom) > 1:
-            result = f"({result})"
+            result = f"{result}"
         return result

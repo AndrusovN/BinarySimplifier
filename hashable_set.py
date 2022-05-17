@@ -14,14 +14,24 @@ class HashableSet:
     def __contains__(self, item: int):
         return bool((self.data >> item) & 1)
 
+    def __getitem__(self, item: int) -> bool:
+        return self.__contains__(item)
+
     def __or__(self, other):
         return HashableSet(self.data | other.data)
+
+    def deepcopy(self):
+        return HashableSet(self.data)
 
     def __hash__(self):
         return hash(self.data)
 
     def __xor__(self, other):
         return HashableSet(self.data ^ other.data)
+
+    def remove(self, other: int):
+        if self[other]:
+            self.data ^= (1 << other)
 
     def __and__(self, other):
         return HashableSet(self.data & other.data)

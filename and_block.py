@@ -33,6 +33,23 @@ class AndBlock:
         return self.inversed_values.is_subset(other.inversed_values) and \
                self.straight_values.is_subset(other.straight_values)
 
+    def contains(self, variable_id: int, negation=False):
+        if negation:
+            return self.inversed_values[variable_id]
+        else:
+            return self.straight_values[variable_id]
+
+    def deepcopy(self):
+        return AndBlock(self.straight_values.deepcopy(), self.inversed_values.deepcopy())
+
+    def remove_variable(self, variable_id: int, negation=False):
+        if negation:
+            self.inversed_values.remove(variable_id)
+            return self
+        else:
+            self.straight_values.remove(variable_id)
+            return self
+
     def __str__(self):
         result = ""
         for item in self.straight_values:

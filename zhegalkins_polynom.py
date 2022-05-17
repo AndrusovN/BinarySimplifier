@@ -94,6 +94,6 @@ class ZhegalkinsPolynom:
                 result = "1"
             else:
                 result = f"!({result})"
-        elif len(values_set) == 1:
+        elif len(values_set) == 1 and result[0] == "(":
             result = result[1:-1]
         return result
