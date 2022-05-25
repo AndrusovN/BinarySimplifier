@@ -1,35 +1,52 @@
-# Holder of variables names
-# This class works with given variables and processes their ids
 from singleton import singleton
+from variable import Variable
+from typing import *
 
 
 @singleton
 class VariableNamesHolder:
-    # List of variable name
-    variable_names = []
+    variables: List[Variable]
 
-    # Initialization with given list
-    def __init__(self, variable_names = []):
-        self.variable_names = variable_names
+    def __init__(self):
+        self.variables = []
 
-    # Gen name of variable by it's id
-    def get_variable_name(self, id: int):
-        if 0 <= id < len(self.variable_names):
-            return self.variable_names[id]
+    def clear(self):
+        for variable in self.variables:
+            variable.id = -1
+            del variable
+        self.variables = []
+
+    def get_variable(self, id: int) -> Variable:
+        if 0 <= id < len(self.variables):
+            return self.variables[id]
         else:
-            return None
+            raise Exception(f"Invalid variable id, should be in [{0}; {len(self.variables) - 1}], but {id} given")
 
-    # Get variable index by name
-    # Returns -1 if there is no such variable registered
-    def get_variable_index(self, name: str):
-        if name not in self.variable_names:
-            return -1
-        return self.variable_names.index(name)
+    def get_variable_index(self, name: str) -> int:
+        variables_with_requested_name = self.__get_variables_by_name(name)
+        if len(variables_with_requested_name) == 0:
+            raise Exception(f"No such variable registered: {name}")
 
-    # Register a new variable
-    def add_variable(self, name: str):
-        self.variable_names.append(name)
-        return len(self.variable_names) - 1
+        return variables_with_requested_name[0].id
 
-    def get_count(self):
-        return len(self.variable_names)
+    def __get_variables_by_name(self, name: str) -> List[Variable]:
+        variables_with_requested_name = list(filter(
+            lambda variable: variable.name == name,
+            self.variables))
+
+        return variables_with_requested_name
+
+    def is_variable_registered(self, name: str) -> bool:
+        variables_with_requested_name = self.__get_variables_by_name(name)
+
+        return len(variables_with_requested_name) != 0
+
+    # returns id of new registered variable
+    def register_variable(self, variable: Variable) -> int:
+        variable.id = len(self.variables)
+        self.variables.append(variable)
+
+        return len(self.variables) - 1
+
+    def get_number_of_variables(self) -> int:
+        return len(self.variables)

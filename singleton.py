@@ -1,9 +1,9 @@
-# The singleton decorator for creating singleton design pattern
-def singleton(class_):
+def singleton(given_singleton_class):
     instances = {}
 
     def get_instance(*args, **kwargs):
-        if class_ not in instances:
-            instances[class_] = class_(*args, **kwargs)
-        return instances[class_]
+        if given_singleton_class not in instances:
+            instances[given_singleton_class] = given_singleton_class(*args, **kwargs)
+        return instances[given_singleton_class]
+
     return get_instance

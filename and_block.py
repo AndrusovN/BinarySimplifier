@@ -3,60 +3,60 @@ from variable_names import VariableNamesHolder
 
 
 class AndBlock:
-    straight_values: HashableSet
-    inversed_values: HashableSet
+    required_true_variables: HashableSet
+    required_false_variables: HashableSet
 
     def __init__(self, straight_values=HashableSet(), inversed_values=HashableSet()):
-        self.straight_values = straight_values
-        self.inversed_values = inversed_values
+        self.required_true_variables = straight_values
+        self.required_false_variables = inversed_values
 
     def try_match(self, other):
-        straight = self.straight_values ^ other.straight_values
-        inverse = self.inversed_values ^ other.inversed_values
+        straight = self.required_true_variables ^ other.required_true_variables
+        inverse = self.required_false_variables ^ other.required_false_variables
         if len(straight) != 1:
             return None
         if straight != inverse:
             return None
 
-        straight_result = (self.straight_values | other.straight_values) ^ straight
-        inverse_result = (self.inversed_values | other.inversed_values) ^ inverse
+        straight_result = (self.required_true_variables | other.required_true_variables) ^ straight
+        inverse_result = (self.required_false_variables | other.required_false_variables) ^ inverse
 
         return straight_result, inverse_result
 
     def __hash__(self):
-        return hash(self.straight_values) * 179 + hash(self.inversed_values)
+        return hash(self.required_true_variables) * 179 + hash(self.required_false_variables)
 
     def __eq__(self, other):
-        return self.inversed_values == other.inversed_values and self.straight_values == other.straight_values
+        return self.required_false_variables == other.required_false_variables and self.required_true_variables == other.required_true_variables
 
     def is_subset(self, other):
-        return self.inversed_values.is_subset(other.inversed_values) and \
-               self.straight_values.is_subset(other.straight_values)
+        return self.required_false_variables.is_subset(other.required_false_variables) and \
+               self.required_true_variables.is_subset(other.required_true_variables)
 
     def contains(self, variable_id: int, negation=False):
         if negation:
-            return self.inversed_values[variable_id]
+            return self.required_false_variables[variable_id]
         else:
-            return self.straight_values[variable_id]
+            return self.required_true_variables[variable_id]
 
     def deepcopy(self):
-        return AndBlock(self.straight_values.deepcopy(), self.inversed_values.deepcopy())
+        return AndBlock(self.required_true_variables.deepcopy(), self.required_false_variables.deepcopy())
 
     def remove_variable(self, variable_id: int, negation=False):
         if negation:
-            self.inversed_values.remove(variable_id)
+            self.required_false_variables.remove(variable_id)
             return self
         else:
-            self.straight_values.remove(variable_id)
+            self.required_true_variables.remove(variable_id)
             return self
 
     def __str__(self):
         result = ""
-        for item in self.straight_values:
+        for item in self.required_true_variables:
             if len(result) > 0:
                 result += ' * '
             result += VariableNamesHolder().get_variable_name(item)
-        for item in self.inversed_values:
+        for item in self.required_false_variables:
             if len(result) > 0:
                 result += ' * '
             result += f'(!{VariableNamesHolder().get_variable_name(item)})'
